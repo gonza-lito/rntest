@@ -1,9 +1,8 @@
 import Tron from "reactotron-react-native"
-import { RootStore } from "../../models/root-store/root-store"
+import { RootStore } from "../../models/root-store"
 import { onSnapshot } from "mobx-state-tree"
 import { ReactotronConfig, DEFAULT_REACTOTRON_CONFIG } from "./reactotron-config"
 import { mst } from "reactotron-mst"
-import { clear } from "../../utils/storage"
 import { commandMiddleware } from "./command-middleware"
 
 // Teach TypeScript about the bad things we want to do.
@@ -25,21 +24,17 @@ if (__DEV__) {
 } else {
   // attach a mock so if things sneaky by our __DEV__ guards, we won't crash.
   console.tron = {
-    benchmark: noop,
-    clear: noop,
-    close: noop,
     configure: noop,
     connect: noop,
+    use: noop,
+    useReactNative: noop,
+    clear: noop,
+    log: noop,
+    logImportant: noop,
     display: noop,
     error: noop,
     image: noop,
-    log: noop,
-    logImportant: noop,
-    overlay: noop,
     reportError: noop,
-    use: noop,
-    useReactNative: noop,
-    warn: noop,
   }
 }
 
@@ -62,6 +57,7 @@ export class Reactotron {
     this.config = {
       host: "localhost",
       useAsyncStorage: true,
+      clearOnLoad: true,
       ...config,
       state: {
         initial: false,
@@ -127,29 +123,11 @@ export class Reactotron {
         }),
       )
 
+      // hookup custom command middleware
+      Tron.use(commandMiddleware(() => this.rootStore))
+
       // connect to the app
       Tron.connect()
-
-      // Register Custom Commands
-      Tron.onCustomCommand({
-        title: 'Reset Root Store',
-        description: 'Resets the MST store',
-        command: 'resetStore',
-        handler: () => {
-          console.tron.log("resetting store")
-          clear()
-        },
-      })
-
-      Tron.onCustomCommand({
-        title: 'Reset Navigation Store',
-        description: 'Resets the navigation store',
-        command: 'resetNavigation',
-        handler: () => {
-          console.tron.log("resetting navigation store")
-          this.rootStore.navigationStore.reset()
-        }
-      })
 
       // clear if we should
       if (this.config.clearOnLoad) {

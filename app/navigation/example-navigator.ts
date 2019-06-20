@@ -1,11 +1,10 @@
 import { createStackNavigator } from "react-navigation"
-import { FirstExampleScreen } from "../screens/first-example-screen"
-import { SecondExampleScreen } from "../screens/second-example-screen"
+import { IndexScreen } from "../views/example/index-screen"
+import { ToDoListScreen } from "../views/example/to-do-list"
+import { DrawerScreens } from "./drawer-navigator";
 
 export const ExampleNavigator = createStackNavigator({
-  firstExample: { screen: FirstExampleScreen },
-  secondExample: { screen: SecondExampleScreen },
-},
-{
-  headerMode: "none",
-})
+         index: { screen: IndexScreen },
+         toDoList: { screen: ToDoListScreen },
+         drawerStack: { screen: DrawerScreens },
+       })

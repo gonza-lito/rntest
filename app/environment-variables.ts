@@ -9,7 +9,7 @@
 //   2.  You must use this syntax: process.env.NAME_OF_ENV_VAR.  No funny stuff
 //       or the babel plugin won't work.
 //
-//   3.  You must whitelist each one in your `babel` config.
+//   3.  You must whitelist each one in your `.babelrc` file.
 //
 // GOTCHA:
 //

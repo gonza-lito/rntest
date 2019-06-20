@@ -3,7 +3,7 @@ import { inject, observer } from "mobx-react"
 // @ts-ignore: until they update @type/react-navigation
 import { getNavigation, NavigationScreenProp, NavigationState } from "react-navigation"
 import { RootNavigator } from "./root-navigator"
-import { NavigationStore } from "./navigation-store"
+import { NavigationStore } from "../models/navigation-store"
 
 interface StatefulNavigatorProps {
   navigationStore?: NavigationStore
